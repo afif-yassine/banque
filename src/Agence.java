@@ -2,6 +2,8 @@ public class Agence {
     private String Numero;
     private static int id = 0;
     private String adresse;
+    private Directeur directeur;
+    private Employés[] lesEmployes;
     private Client[] lesClients;
     private int nbClientActuel;
     private int nbCompteActuel;
@@ -15,6 +17,8 @@ public class Agence {
         this.id = id + 1;
         this.adresse = adresse;
         this.lesClients = new Client[30];
+        this.lesComptes = new Compte[30];
+
     }
 
 
@@ -41,26 +45,36 @@ public class Agence {
     }
 
     public int getNbClients() {
-        if (lesClients == null) {
-            return 0;
-        }
         return this.nbClientActuel;
     }
 
     public int getNbComptes() {
-        if (lesComptes == null) {
-            return 0;
-        }
         return this.nbCompteActuel;
     }
 
     public void addCompte(Compte newCompte) {
+        boolean isInTabel = false;
+        for(int i =0; i < getNbComptes();i++){
+            if(lesComptes[i].getCode() == newCompte.getCode()){
+                isInTabel=true;
+            }
+        }
+        if(isInTabel==false) {
+            lesComptes[nbCompteActuel++] = newCompte;
+        }
+    }
 
-        lesComptes[nbCompteActuel++] = newCompte;
+    public Compte[] getLesComptes() {
+        return lesComptes;
+    }
 
+    public Client[] getLesClients() {
+        return lesClients;
     }
 
     public void addClient(Client newClient) {
         lesClients[nbClientActuel++] = newClient;
+        for(int i=0;i< newClient.getNbComptes();i++)
+            addCompte(newClient.getMesCompte()[i]);
     }
 }

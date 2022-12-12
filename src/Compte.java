@@ -1,23 +1,22 @@
 public class Compte {
     private String code;
+    static int numbreCodeActuelle=0;
     protected double solde;
     protected Agence lAgence;
     protected Client Proprietaire;
 
 
-    public Compte(Agence myAgence , Client proprietaire){
+    public Compte(Agence myAgence , Client proprietaire,double solde){
         this.lAgence = myAgence;
         this.Proprietaire = proprietaire;
-        code= this.getClass().getName()+":"+lAgence.getNbComptes()+1;
+        code= this.getClass().getName()+":"+numbreCodeActuelle++;
+        this.solde=solde;
     }
 
+    public int calcule(){return 55;}
 
     public String getCode() {
         return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public double getSolde() {
@@ -44,11 +43,11 @@ public class Compte {
         Proprietaire = proprietaire;
     }
 
-    public void deposer(double depo){
-
+    public void deposer(double sommeADeposer){
+        this.solde = this.solde + sommeADeposer;
     }
-    public void retirer(double  retir){
-
+    public void retirer(double  sommeARetirer){
+        if(sommeARetirer<this.solde)this.solde = this.solde - sommeARetirer;
     }
 
 

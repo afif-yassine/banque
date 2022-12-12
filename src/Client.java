@@ -1,18 +1,16 @@
-public class Client {
+public class Client extends Personne {
+    private Employés conseiller;
     private String code;
     private static int id=0;
-    private String nom;
-    private String prenom;
-    private String adresse;
-    private Agence monAgence;
+    protected String adresse;
     private Compte[] mesCompte;
-
     private int nbCompteActuel;
 
 
-    public Client(Agence monAgence){
+    public Client(Agence monAgence,String nom,String prenom ){
+        super(monAgence,nom,prenom);
+        this.mesCompte = new Compte[4];
         nbCompteActuel = 0;
-        this.monAgence = monAgence;
         code = this.getClass().getName()+": "+(++id);
     }
 
@@ -25,27 +23,21 @@ public class Client {
 
 
     public void addCompte(Compte newCompte){
-        boolean test = true;
-        for(Compte compteCheck : mesCompte){
-            if(compteCheck.getCode() ==  newCompte.getCode() && getNbComptes() > 4){
-                test=false;
-                System.out.println("le Compte est deja existe \n le nombre depasser 4 !! !! \n");
-            }
-        }
-        if(test==true){
-            this.mesCompte[nbCompteActuel++]=newCompte;
-            newCompte.lAgence.addCompte(newCompte);
-        }
-
+        if(nbCompteActuel<4)
+            this.mesCompte[nbCompteActuel++]=newCompte; //if if attention
     }
 
 
-    public void depoder(int numCompte, double cashDepo){
-
+    public void deposer(int numCompte, double sommeADeposer){
+        if (numCompte<4 && numCompte>=0){
+            mesCompte[numCompte].deposer(sommeADeposer);   // polimorphisem car ci il lence compte epaghn ou payant
+        }
     }
 
-    public void retirer(int numCompte, double cashRetir){
-
+    public void retirer(int numCompte, double sommeARetirer){
+        if (numCompte<4 && numCompte>=0){
+            mesCompte[numCompte].retirer(sommeARetirer);
+        }
     }
 
     public int getNbComptes(){
@@ -55,9 +47,6 @@ public class Client {
     public String getCode(){
         return this.code;
     }
-
-
-                                                            //les seter and geter
 
 
     public String getNom() {
@@ -92,8 +81,11 @@ public class Client {
         this.adresse = adresse;
     }
 
-
-
-
-
+    public Compte[] getMesCompte() {
+        Compte[] tableauARetoure = new Compte[getNbComptes()];
+        for(int i=0;i<getNbComptes();i++){
+            tableauARetoure[i]=mesCompte[i];
+        }
+        return tableauARetoure;
+    }    // attention il y a une beug
 }
